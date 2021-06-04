@@ -36,7 +36,8 @@ jobs:
     - name: Build Firmware
       env:
         TNAME: "NETGEAR-BZV R6220"
-        images_dir: /opt/images
+        images_dir: "/opt/images"
+        image_name: "NETGEAR-BZV_R6220"
       run: |
         cwd=`pwd`
         CONFIG_TOOLCHAIN_DIR=${cwd//\//\\\/}\\/toolchain-mipsel
@@ -99,20 +100,12 @@ jobs:
         sudo ./build_firmware_modify $m 0
         sudo mv -f images/*.trx /opt/images/
         done
-    - name: Create archive
-      if: ${{ github.event_name != 'release' && success() }}
-      run: |
-        ls -lh ${images_dir}
-        GIT_VERSION=`git rev-parse --short=7 HEAD 2>/dev/null` && [ -n "$GIT_VERSION" ] && \
-        image_name=images_${TNAME}_${GIT_VERSION} || image_name=images_${TNAME}
-        cd ${images_dir}; md5sum *.trx |tee md5sum.txt; 7z a -mx=9 ${image_name}.7z ./*
-        echo "image_name=${image_name}" >> $GITHUB_ENV
     - name: Upload images to Artifact
       if: ${{ github.event_name != 'release' && success() }}
       uses: actions/upload-artifact@v2.2.1
       with:
         name: ${{ env.image_name }}
-        path: ${{ env.images_dir }}/*.7z
+        path: /opt/images/*.trx
     #- name: Upload binaries to release
     #  uses: svenstaro/upload-release-action@v1-release
     #  with:
