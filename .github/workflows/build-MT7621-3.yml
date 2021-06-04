@@ -37,7 +37,6 @@ jobs:
       env:
         TNAME: "NETGEAR-BZV R6220"
         images_dir: "/opt/images"
-        image_name: "NETGEAR-BZV_R6220"
       run: |
         cwd=`pwd`
         CONFIG_TOOLCHAIN_DIR=${cwd//\//\\\/}\\/toolchain-mipsel
@@ -104,7 +103,7 @@ jobs:
       if: ${{ github.event_name != 'release' && success() }}
       uses: actions/upload-artifact@v2.2.1
       with:
-        name: ${{ env.image_name }}
+        name: NETGEAR-BZV_R6220
         path: /opt/images/*.trx
     #- name: Upload binaries to release
     #  uses: svenstaro/upload-release-action@v1-release
