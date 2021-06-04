@@ -4,14 +4,14 @@ on:
   release:
     types: [published]
   push:
-#    tags:
-#    - 'v*'
+    tags:
+    - 'v*'
   #  branches: 
   #    - master
 #  schedule:
 #    - cron: 0 17 * * 4
-#  watch:
-   # types: [started]
+  watch:
+    types: [started]
 
 jobs:
   build:
@@ -99,12 +99,18 @@ jobs:
         sudo ./build_firmware_modify $m 0
         sudo mv -f images/*.trx /opt/images/
         done
-    - name: Upload images to Artifact
-      if: ${{ github.event_name != 'release' && success() }}
-      uses: actions/upload-artifact@v2.2.1
+    - name : Upload packages
+      uses: actions/upload-artifact@master
+      if: always()
       with:
-        name: NETGEAR-BZV_R6220
-        path: /opt/images/*.trx
+        name: Padavan-packages
+        path: /opt/images
+    #- name: Upload images to Artifact
+    #  if: ${{ github.event_name != 'release' && success() }}
+    #  uses: actions/upload-artifact@v2.2.1
+    #  with:
+    #    name: NETGEAR-BZV_R6220
+    #    path: /opt/images/*.trx
     #- name: Upload binaries to release
     #  uses: svenstaro/upload-release-action@v1-release
     #  with:
